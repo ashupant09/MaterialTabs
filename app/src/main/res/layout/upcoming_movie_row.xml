@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp"
+    android:layout_margin="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:background="@drawable/custom_movie_box_office"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/upMovieThumbnail"
+            android:src="@mipmap/ic_launcher"
+            android:elevation="5dp"
+            android:layout_centerVertical="true"
+            android:layout_width="54dp"
+            android:layout_height="80dp" />
+
+        <TextView
+            android:id="@+id/upMovieTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:layout_marginLeft="56dp"
+            android:alpha="0.87"
+            android:textSize="16sp"
+            android:padding="4dp"
+            android:layout_alignTop="@id/upMovieThumbnail"
+            />
+
+        <TextView
+            android:id="@+id/upMovieRelease"
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/upMovieTitle"
+            android:layout_alignParentRight="true"
+            android:padding="4dp"
+            android:alpha="0.87"
+            android:textSize="14sp"
+            android:layout_height="wrap_content" />
+
+        <RatingBar
+            android:id="@+id/upMovieScore"
+            style="@android:style/Widget.Holo.RatingBar.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/upMovieRelease"
+            android:isIndicator="true"
+            android:numStars="0"
+            android:max="5"
+            android:padding="4dp"
+            android:layout_alignParentRight="true"
+            />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

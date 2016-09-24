@@ -162,8 +162,9 @@ public class IconTabsActivity extends BaseActivity implements View.OnClickListen
     private void setupViewPager(ViewPager viewPager) {
         adapter = new PagerAdapter(getSupportFragmentManager());
         adapter.addFragments(FragmentSearch.newInstance("", ""), "ONE");
-        adapter.addFragments(FragmentBoxOffice.newInstance("", ""), "TWO");
         adapter.addFragments(FragmentUpcoming.newInstance("", ""), "THREE");
+        adapter.addFragments(FragmentBoxOffice.newInstance("", ""), "TWO");
+
         viewPager.setAdapter(adapter);
     }
 

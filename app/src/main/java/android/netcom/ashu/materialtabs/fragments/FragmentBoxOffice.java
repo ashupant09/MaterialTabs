@@ -98,7 +98,7 @@ public class FragmentBoxOffice extends Fragment implements SortListener, BoxOffi
             moviesList = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
 
         } else {
-            moviesList = MyApplication.getWritableDataBase().readMovies();
+            moviesList = MyApplication.getWritableDataBase().readMovies(1);
             if(moviesList.isEmpty()){
                 new TaskLoadMoviesBoxOffice(this).execute();
             }

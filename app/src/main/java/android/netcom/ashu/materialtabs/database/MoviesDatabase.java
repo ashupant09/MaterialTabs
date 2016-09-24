@@ -25,12 +25,12 @@ public class MoviesDatabase {
         mDataBase = mHelper.getWritableDatabase();
     }
 
-    public void insertMovies(ArrayList<Movies> movieList, boolean clearPrevious){
+    public void insertMovies(ArrayList<Movies> movieList, boolean clearPrevious, int insertTableFlag){
 
         if(clearPrevious){
-            deleteAll();
+            deleteAll(insertTableFlag);
         }
-        String sql = "INSERT INTO " + MoviesHelper.TABLE_BOX_OFFICE + " VALUES (?,?,?,?,?,?,?,?,?,?);";
+        String sql = "INSERT INTO " +  (insertTableFlag == 1  ? MoviesHelper.TABLE_BOX_OFFICE : MoviesHelper.TABLE_UPCOMING )+ " VALUES (?,?,?,?,?,?,?,?,?,?);";
         SQLiteStatement statement = mDataBase.compileStatement(sql);
         mDataBase.beginTransaction();
 
@@ -54,7 +54,7 @@ public class MoviesDatabase {
         mDataBase.endTransaction();
     }
 
-    public ArrayList<Movies> readMovies(){
+    public ArrayList<Movies> readMovies(int readTableFlag){
         ArrayList<Movies> movieList = new ArrayList<>();
         String[] columns = {MoviesHelper.COLUMN_UID,
                 MoviesHelper.COLUMN_TITLE,
@@ -68,7 +68,7 @@ public class MoviesDatabase {
                 MoviesHelper.COLUMN_URL_SIMILAR
         };
 
-        Cursor cursor = mDataBase.query(MoviesHelper.TABLE_BOX_OFFICE, columns, null, null,null, null,null);
+        Cursor cursor = mDataBase.query((readTableFlag == 1? MoviesHelper.TABLE_BOX_OFFICE : MoviesHelper.TABLE_UPCOMING), columns, null, null,null, null,null);
         if(cursor != null && cursor.moveToFirst()){
             L.p("loading entries : " + cursor.getCount() + new Date(System.currentTimeMillis()));
             do{
@@ -91,12 +91,13 @@ public class MoviesDatabase {
         return movieList;
     }
 
-    public void deleteAll(){
-        mDataBase.delete(MoviesHelper.TABLE_BOX_OFFICE, null, null);
+    public void deleteAll(int deleteTableFlag){
+        mDataBase.delete((deleteTableFlag == 1? MoviesHelper.TABLE_BOX_OFFICE : MoviesHelper.TABLE_UPCOMING), null, null);
     }
     private static class MoviesHelper extends SQLiteOpenHelper{
 
         public static final String TABLE_BOX_OFFICE = "movies_box_office";
+        public static final String TABLE_UPCOMING="movies_upcoming";
         public static final String COLUMN_UID = "_id";
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_RELEASE_DATE = "release_date";
@@ -108,6 +109,19 @@ public class MoviesDatabase {
         public static final String COLUMN_URL_REVIEWS = "url_reviews";
         public static final String COLUMN_URL_SIMILAR = "url_similar";
         private static final String CREATE_TABLE_BOX_OFFICE = "CREATE TABLE " + TABLE_BOX_OFFICE + " (" +
+                COLUMN_UID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COLUMN_TITLE + " TEXT," +
+                COLUMN_RELEASE_DATE + " INTEGER,"+
+                COLUMN_AUDIENCE_SCORE + " INTEGER," +
+                COLUMN_SYNOPSIS + " TEXT," +
+                COLUMN_URL_THUMBNAIL + " TEXT," +
+                COLUMN_URL_SELF + " TEXT," +
+                COLUMN_URL_CAST + " TEXT," +
+                COLUMN_URL_REVIEWS + " TEXT," +
+                COLUMN_URL_SIMILAR + " TEXT" +
+                ");";
+
+        private static final String CREATE_TABLE_UPCOMING = "CREATE TABLE " + TABLE_UPCOMING+ " (" +
                 COLUMN_UID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_TITLE + " TEXT," +
                 COLUMN_RELEASE_DATE + " INTEGER,"+
@@ -134,7 +148,9 @@ public class MoviesDatabase {
 
             try {
                 db.execSQL(CREATE_TABLE_BOX_OFFICE);
-                L.m(context, "create table box office executed");
+                L.t(context, "create table upcoming executed");
+                db.execSQL(CREATE_TABLE_UPCOMING);
+                L.t(context, "create table box office executed");
             } catch (SQLException e) {
                 L.t(context, e+"");
             }
@@ -145,6 +161,9 @@ public class MoviesDatabase {
 
             try {
                 db.execSQL("DROP TABLE " + TABLE_BOX_OFFICE + " IF EXISTS;");
+                onCreate(db);
+                L.m(context, "upgrade table upcoming executed");
+                db.execSQL("DROP TABLE " + TABLE_UPCOMING + " IF EXISTS;");
                 onCreate(db);
                 L.m(context, "upgrade table boxoffice executed");
             } catch (SQLException e) {

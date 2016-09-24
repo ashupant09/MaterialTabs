@@ -5,6 +5,7 @@ import android.netcom.ashu.materialtabs.POJO.Movies;
 import android.netcom.ashu.materialtabs.json.EndPoints;
 import android.netcom.ashu.materialtabs.json.Parser;
 import android.netcom.ashu.materialtabs.json.Requestor;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 
@@ -18,10 +19,19 @@ import java.util.ArrayList;
 public class MovieUtils {
 
     public static ArrayList<Movies> loadBoxOfficeMovies(RequestQueue requestQueue){
-        JSONObject response = Requestor.sendJsonRequest(requestQueue, EndPoints.getCurrentBoxOfficeRequestUrl(30));
+        Log.w("URL", "box office url is ---> "+ EndPoints.getCurrentBoxOfficeRequestUrl(30, 1) );
+        JSONObject response = Requestor.sendJsonRequest(requestQueue, EndPoints.getCurrentBoxOfficeRequestUrl(30, 1));
         ArrayList<Movies> movieList = Parser.parseMoviesJSON(response);
-        MyApplication.getWritableDataBase().insertMovies(movieList, true);
+        MyApplication.getWritableDataBase().insertMovies(movieList, true, 1);
 
+        return movieList;
+    }
+
+    public static ArrayList<Movies> loadUpcomingMovies(RequestQueue requestQueue){
+        Log.w("URL", "url is ---> "+ EndPoints.getCurrentBoxOfficeRequestUrl(30, 2) );
+        JSONObject response = Requestor.sendJsonRequest(requestQueue, EndPoints.getCurrentBoxOfficeRequestUrl(30, 2));
+        ArrayList<Movies> movieList = Parser.parseMoviesJSON(response);
+        MyApplication.getWritableDataBase().insertMovies(movieList, true, 2);
         return movieList;
     }
 }

@@ -3,6 +3,7 @@ package android.netcom.ashu.materialtabs.services;
 import android.netcom.ashu.materialtabs.App.MyApplication;
 import android.netcom.ashu.materialtabs.POJO.Movies;
 import android.netcom.ashu.materialtabs.callbacks.BoxOfficeMoviesLoadedListener;
+import android.netcom.ashu.materialtabs.callbacks.UpcomingMoviesListener;
 import android.netcom.ashu.materialtabs.extras.Constants;
 import android.netcom.ashu.materialtabs.logging.L;
 import android.netcom.ashu.materialtabs.network.VolleySingleton;
@@ -60,4 +61,5 @@ public class MyService extends JobService implements BoxOfficeMoviesLoadedListen
         L.p("onBoxOfficeMovie Loaded");
         jobFinished(jobParameters, false);
     }
+
 }
